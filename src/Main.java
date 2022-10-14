@@ -95,13 +95,42 @@ public class Main {
             }
         }
         public void Mostar(ArrayList<Aeroporto> ListaAeroportos){
+            Scanner ler = new Scanner(System.in);
+
             System.out.println("Iniciais"+"|    "+"Estado"+"   |    "+"Nome");
-            int i=0;
-            while(i<ListaAeroportos.size()){
+
+
+            for(int i=0;i<ListaAeroportos.size();i++){
                 Aeroporto aer = ListaAeroportos.get(i);
                 System.out.println(aer.initials+"   |    "+aer.state+"   |    "+aer.name);
-                i++;
             }
+            System.out.println("Deseja filtrar por estado? ( sim / nao )");
+            String resposta= ler.nextLine();
+            if(resposta.equals("sim")){
+                while(true) {
+                    System.out.println("Qual estado deseja?");
+                    String estado = ler.nextLine();
+
+                    boolean param = false;
+
+                    System.out.println("Iniciais" + "|    " + "Estado" + "   |    " + "Nome");
+                    for (int i = 0; i < ListaAeroportos.size(); i++) {
+                        Aeroporto aer = ListaAeroportos.get(i);
+                        if (aer.state.equals(estado)) {
+                            System.out.println(aer.initials + "   |    " + aer.state + "   |    " + aer.name);
+                            param = true;
+                        }
+                    }
+                    if (param == false) {
+                        System.out.println("BUSCA INVALIDA");
+                    }
+                    System.out.println("Deseja realizar uma nova busca?");
+                    resposta= ler.nextLine();
+                    if(resposta.equals("sim")){}
+                    else break;
+                }
+            }
+
         };
         public void RotaOtima(ArrayList<Aeroporto> ListaAeroportos ,ArrayList<Aresta> Arestas , String Partida , String Destino){
 
@@ -143,8 +172,6 @@ public class Main {
 
 
 
-
-
     public static void main(String[] args) {
 
         Scanner ler = new Scanner(System.in);
@@ -153,7 +180,7 @@ public class Main {
 
         ArrayList<Aeroporto> ListaAeroportos = new ArrayList<Aeroporto>();
         ArrayList<Aresta> Arestas = new ArrayList<Aresta>();
-        int Count = 0 ;
+
 
 
 //Obter Aeroportos do Banco de Dados
@@ -163,7 +190,7 @@ public class Main {
             Statement sttm = con.createStatement();
             ResultSet resset = sttm.executeQuery("select * from aeroportos2");
 
-
+            int Count = 0 ;
             while (resset.next()) {
                 Aeroporto aux = new Aeroporto();
                 aux.initials = resset.getString("initials");
@@ -181,7 +208,7 @@ public class Main {
             e.printStackTrace();
         }
 //Cadastro das Arestas em uma Lista
-        for(int i=0; i<Count;i++){
+        for(int i=0; i<ListaAeroportos.size();i++){
             for(int j=0; j<i;j++){
                 Aresta aux = new Aresta();
                 aux.no1 = i;
@@ -197,8 +224,7 @@ public class Main {
         String Destino = ler.nextLine();
         Met.RotaOtima(ListaAeroportos , Arestas ,Partida , Destino);
 
-
-
+//Registra a Pesquisa feita no BD
         try {
 
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetojava","root","12345678");
