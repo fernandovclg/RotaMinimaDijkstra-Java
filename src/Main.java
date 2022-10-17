@@ -218,6 +218,7 @@ public class Main {
             }
         }
 
+//Execução dos Métodos
         Met.Mostar(ListaAeroportos);
         System.out.println("Digite a iniciais doas aeroportos de origem e destino respectivamente:");
         String Partida = ler.nextLine();
